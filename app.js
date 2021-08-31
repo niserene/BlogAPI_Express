@@ -4,10 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-require('dotenv').config()
+require('dotenv').config();
+const mongoose = require('mongoose');
 
+// Router imports here
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+var apiRouter = require('./routes/apiRouter')
+
+
 
 var app = express();
 
@@ -21,8 +26,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// MongoDB connection
+
+const URI = process.env.MONGODB_URL
+mongoose.connect(URI,{
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+}, err=>{
+  if(err) throw err;
+  console.log("Mongo is Connected :)")
+})
+
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
