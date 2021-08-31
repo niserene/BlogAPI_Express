@@ -4,18 +4,19 @@ const UserSchema = new mongoose.Schema({
 
     email:{
         type:String,
-        required: true,
+        required: [true, "Email is required"],
         trim: true,
         unique:true
     },
     username:{
         type:String,
         required:[true, "Username is required"],
+        unique:true,
         trim:true
     },
     password:{
         type:String,
-        required:[true, "password is required"]
+        required:[true, "Password is required"]
     },
     bio:{
         type: String, 
@@ -24,20 +25,8 @@ const UserSchema = new mongoose.Schema({
     image:{
         type:String,
         required:false
-    },
-    role:{
-        type:Number,
-        default:0
-    },
-    followers:{
-        type:[]
-    },
-    following:{
-        type:[]
-    },
-    articles:{
-        
     }
+    
 },{
     timestamps:true,
     collection:"User"
