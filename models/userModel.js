@@ -19,11 +19,13 @@ const UserSchema = new mongoose.Schema({
         required:[true, "Password is required"]
     },
     bio:{
-        type: String, 
+        type: String,
+        default:"", 
         required:false
     },
     image:{
         type:String,
+        default:"",
         required:false
     }
     

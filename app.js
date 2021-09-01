@@ -10,7 +10,11 @@ const mongoose = require('mongoose');
 // Router imports here
 var indexRouter = require('./routes/index');
 
-var apiRouter = require('./routes/apiRouter')
+var usersRouter = require('./routes/usersRouter')
+
+var userRouter = require('./routes/userRouter')
+
+var articlesRouter = require('./routes/articlesRouter')
 
 
 
@@ -40,7 +44,9 @@ mongoose.connect(URI,{
 
 
 app.use('/', indexRouter);
-app.use('/api', apiRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/user', userRouter)
+app.use('/api/articles', articlesRouter)
 
 
 
@@ -57,7 +63,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({errors:{body: err.message}})
 });
 
 module.exports = app;
