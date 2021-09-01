@@ -4,4 +4,16 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-module.exports = validateEmail
+function errJson(errorText){
+
+    return {
+        errors:{
+            body:errorText
+        }
+    }
+}
+
+module.exports = {
+    validateEmail, 
+    errJson
+}

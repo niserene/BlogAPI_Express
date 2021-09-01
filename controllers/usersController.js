@@ -85,17 +85,50 @@ const usersController = {
             })
 
         }, err => next(err))
+    },
+
+    updateUser : async (req, res, next) => {
+
+        if(!req.body.user)
+            return next(new Error("Invalid Data Sequence"))
+
+        const {username, bio, image, password, email} = req.body.user
+
+        var user = {}
+        if(username) user.username = username
+        if(bio) user.bio = bio
+        if(image)user.image = image
+        if(password)user.password = await hashPassword(password)
+
+        User.findOneAndUpdate({email},{
+            $set:{...user}},
+            {new:true})
+        .then( user =>{
+
+            user.token = req.user.token
+            res.json({user:getUser(user)})
+
+        }, err=>{
+            return next(new Error("Could not Update User :("))
+        })
+    },
+
+    getUserByEmail: (req, res, next) => {
+
+        const email = req.user.email
+
+        User.findOne({email})
+        .then(user => {
+
+            if(!user)
+                return next(new Error("No User with the Email Id provided"))
+            user.token = req.user.token
+            return res.json({'user':getUser(user)})
+        })
     }
 
 }
 
 
-function resErr(err){
-    return {
-        errors:{
-            body: err
-        }
-    }
-}
 
 module.exports = usersController
