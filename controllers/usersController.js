@@ -1,5 +1,5 @@
 const User = require('../models/userModel')
-const validateEmail = require('../utils/email')
+const {validateEmail} = require('../utils/email')
 const { hashPassword, matchPassword } = require('../utils/password')
 const { getUser } = require('../utils/security')
 const { getToken } = require('../utils/jwt')

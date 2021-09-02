@@ -64,6 +64,33 @@ const articlesController = {
 
     deleteArticle : (req, res, next)=>{
         
+        const slug = req.params.slug
+        var user = req.user 
+        const email = user.email
+
+        Article.findOne({slug})
+        .then(result =>{
+
+            if(!result){
+                return res.status(404).json(errJson("No Such Article Exist"))
+            }
+
+            result.populate('author')
+            .then(article =>{
+                
+                if(article.author.email !== email){
+                    return res.status(401).json(errJson("You are not Authorised to Delete this article"))
+                }
+                
+                Article.findByIdAndDelete(article._id)
+                .then(result =>{
+
+                    res.json({status: true})
+
+                }, err => next(err))
+
+            }, err => next(err))
+        }) 
     },
 
     updateArticle : (req, res, next)=>{
@@ -72,6 +99,11 @@ const articlesController = {
 
     getAllArticles : (req, res, next)=>{
 
+        Article.find({})
+        .then(result => {
+            
+            return res.json(result)
+        })
     },
 
     getFeedArticles: (req, res, next)=>{
